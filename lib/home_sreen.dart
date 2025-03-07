@@ -1,8 +1,12 @@
 
 
+
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:loginvalidation/database_local.dart';
+import 'package:loginvalidation/home_page.dart';
 
 
 class LogIn extends StatefulWidget {
@@ -44,25 +48,25 @@ class _LogInState extends State<LogIn> {
                     SizedBox(height: 10,),
                     TextFormField(
                       controller: emailcontroller,
-                     validator:(value){
-                      if(value== null || value== ""){
-                        return "can not empty";
-                      }else if(!value.contains('@') || !value.contains('.')){
-                        return"Invalid email";
-                      }
-                      return null;
-                     },
+                      validator:(value){
+                        if(value== null || value== ""){
+                          return "can not empty";
+                        }else if(!value.contains('@') || !value.contains('.')){
+                          return"Invalid email";
+                        }
+                        return null;
+                      },
                       decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.black),
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black),
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+
                         ),
-                       focusedBorder: OutlineInputBorder(
-                         borderRadius: BorderRadius.all(Radius.circular(10))
-                       ),
+                        focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10))
+                        ),
                         enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10)
+                            borderRadius: BorderRadius.circular(10)
                         ),
                       ),
                     ),
@@ -87,25 +91,25 @@ class _LogInState extends State<LogIn> {
                       obscureText: isDesable,
                       decoration: InputDecoration(
                           suffixIcon: InkWell(
-                            onTap: (){
-                              isDesable = !isDesable;
-                              setState(() {});
-                            },
+                              onTap: (){
+                                isDesable = !isDesable;
+                                setState(() {});
+                              },
                               child:isDesable==true ? Icon(Icons.visibility):Icon(Icons.visibility_off)),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.all(
                               Radius.circular(10),
                             ),
                           ),
-                        focusedBorder:OutlineInputBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(10),
+                          focusedBorder:OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10),
+                            ),
+
                           ),
-                
-                        ),
-                       enabledBorder: OutlineInputBorder(
-                         borderRadius: BorderRadius.circular(10)
-                       )
+                          enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10)
+                          )
                       ),
                     ),
                     SizedBox(
@@ -114,24 +118,27 @@ class _LogInState extends State<LogIn> {
                     Row(children: [
                       Checkbox(value: true, onChanged:(value){}),
                       Text('Remember me',style: TextStyle(
-                        fontSize: 20
+                          fontSize: 20
                       ),)
                     ],),
                     SizedBox(height: 10,),
                     InkWell(
-                      onTap: (){
+                      onTap: ()async{
                         log("${emailcontroller.text}");
-                         if(!mykey.currentState!.validate()){
+                        if(!mykey.currentState!.validate()){
                           return;
-                         }
+                        }
                         if(emailcontroller.text =="aysha@gmail.com" && passwordcontroller.text == "Aysha123"){
                           log("login success");
-                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("login sucess")));
+                         EasyLoading.showSuccess("Login Sucess");
+                         await AppLocalData().dataInsertfun(key: "login", value: "yes");
+                         await AppLocalData().dataInsertfun(key: "name", value: "${emailcontroller.text}");
+                         await AppLocalData().dataInsertfun(key: "name", value: "${passwordcontroller.text}");
+                         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Mainpage()));
+
                         }else{
-                          log("Not success");
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            backgroundColor: Colors.red,
-                              content: Text('Wrong user.Please try again')));
+                          EasyLoading.showError("Invalid login");
+
                         }
 
                       },
@@ -144,15 +151,15 @@ class _LogInState extends State<LogIn> {
                               color: Colors.pinkAccent,
                               child: Center(
                                   child:  Padding(
-                                padding:  EdgeInsets.all(15.0),
-                                child: Text(
-                                  'Login',
-                                  style:  TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              )),
+                                    padding:  EdgeInsets.all(15.0),
+                                    child: Text(
+                                      'Login',
+                                      style:  TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  )),
                             ),
                           )
                         ],
@@ -167,7 +174,7 @@ class _LogInState extends State<LogIn> {
                     ),
                     SizedBox(height: 20,),
                     Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Card(
                           margin: EdgeInsets.all(10),
@@ -175,19 +182,19 @@ class _LogInState extends State<LogIn> {
                           child:Row(
                             children: [
                               Image.network("https://www.polymtl.ca/calendrier/sites/calendrier.amigow2020.polymtl.ca/files/googlelogo.jpg",
-                              height: 70,width: 70,)
+                                height: 70,width: 70,)
                             ],
                           ),
                         ),
-                          Card(
-                            margin: EdgeInsets.all(10),
-                            elevation: 2,
-                            child:Row(
-                              children: [
-                                Image.network("https://static.vecteezy.com/system/resources/previews/013/901/773/original/facebook-icon-ios-facebook-social-media-logo-on-white-background-free-free-vector.jpg",
-                                  height: 70,width: 70,)
-                              ],
-                            ),
+                        Card(
+                          margin: EdgeInsets.all(10),
+                          elevation: 2,
+                          child:Row(
+                            children: [
+                              Image.network("https://static.vecteezy.com/system/resources/previews/013/901/773/original/facebook-icon-ios-facebook-social-media-logo-on-white-background-free-free-vector.jpg",
+                                height: 70,width: 70,)
+                            ],
+                          ),
                         ),
                         Card(
                           margin: EdgeInsets.all(10),
@@ -204,7 +211,7 @@ class _LogInState extends State<LogIn> {
                           elevation: 2,
                           child:Row(
                             children: [
-                             Image.network("https://www.kindpng.com/picc/m/20-203688_twitter-icon-transparent-background-twitter-logo-hd-png.png",
+                              Image.network("https://www.kindpng.com/picc/m/20-203688_twitter-icon-transparent-background-twitter-logo-hd-png.png",
                                 height: 70,width: 70,)
                             ],
                           ),

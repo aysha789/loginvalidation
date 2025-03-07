@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:loginvalidation/home_sreen.dart';
+import 'package:loginvalidation/splash_screen.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+
+
 void main(){
   runApp(MyApp());
 }
@@ -11,9 +14,14 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+
+
   @override
   Widget build(BuildContext context) {
-    return LogIn();
+    return MaterialApp(
+      builder: EasyLoading.init(),
+      home: SplashScreen(),
+    );
   }
 }
 
